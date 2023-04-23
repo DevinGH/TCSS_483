@@ -179,4 +179,42 @@ class RegexSolverTest {
     void invalidNameNoCapital(){
         assertEquals(false, solver.validName("asjhdbjash, ahsdbjahs, A"));
     }
+
+    @Test
+    void validDateSlash() {
+        assertEquals(true, solver.validDate("12/23/2023"));
+        assertEquals(true, solver.validDate("02/20/1993"));
+        assertEquals(true, solver.validDate("10/01/1986"));
+    }
+
+    @Test
+    void validDateDash() {
+        assertEquals(true, solver.validDate("12-23-2023"));
+        assertEquals(true, solver.validDate("02-03-2023"));
+    }
+
+    @Test
+    void invalidDateEmpty(){
+        assertEquals(false, solver.validDate(""));
+    }
+
+    @Test
+    void invalidDateWrongDay(){
+        assertEquals(false, solver.validDate("12/44/2022"));
+    }
+
+    @Test
+    void invalidDateWrongYear(){
+        assertEquals(false, solver.validDate("12/23/0000"));
+    }
+
+    @Test
+    void invalidDateWrongMonth(){
+        assertEquals(false, solver.validDate("32/12/2223"));
+    }
+
+    @Test
+    void invalidDateNoDigits(){
+        assertEquals(false, solver.validDate("AA/AA/AAAA"));
+    }
 }

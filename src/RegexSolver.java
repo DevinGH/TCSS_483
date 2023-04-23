@@ -131,4 +131,95 @@ public class RegexSolver {
 
         return false;
     }
+
+    /**
+     * Validates day is in correct format
+     * @param input
+     * @return
+     */
+    public boolean validDate (final String input) {
+        int day = 0, month = 0, year = 0;
+
+        String regexDate = "[-/]?([0-9]{2,4})[-/]?";
+
+        Pattern pattern = Pattern.compile(regexDate);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            if(matcher.group().contains("-")){
+                month = Integer.parseInt(matcher.group().split("-")[0]);
+            } else if (matcher.group().contains("/")) {
+                month = Integer.parseInt(matcher.group().split("/")[0]);
+            }
+        }
+
+        if (matcher.find()) {
+            if(matcher.group().contains("-")){
+                day = Integer.parseInt(matcher.group().split("-")[0]);
+            } else if (matcher.group().contains("/")) {
+                day = Integer.parseInt(matcher.group().split("/")[0]);
+            }
+        }
+
+        if (matcher.find()) {
+            year = Integer.parseInt(matcher.group().split("-")[0]);
+        }
+
+        if (!isDay(day, month) || !isMonth(month) || !isYear(year)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isDay (final int day, final int month) {
+        System.out.println(day);
+
+        if (month == 1 || month == 3 || month == 5 ||
+                month == 7 || month == 8 || month == 10 || month == 12) {
+            if (day < 1 || day > 31) {
+                return false;
+            }
+        }
+
+        if (month == 4 || month == 6 || month == 9 || month == 11) {
+            if (day < 1 || day > 30) {
+                return false;
+            }
+        }
+
+        if (month == 2) {
+            if (day < 1 || day > 28) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isMonth (final int month) {
+        System.out.println(month);
+
+        if (month < 1 || month > 12) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isYear (final int year) {
+        System.out.println(year);
+
+        if (year < 1) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        RegexSolver solver = new RegexSolver();
+
+        System.out.println(solver.validDate("09/12/2032"));
+    }
 }
