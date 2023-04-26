@@ -140,86 +140,152 @@ public class RegexSolver {
     public boolean validDate (final String input) {
         int day = 0, month = 0, year = 0;
 
-        String regexDate = "[-/]?([0-9]{2,4})[-/]?";
+        String regexDateSlash = "^" +//Checks there's nothing at the beginning
+                "((1[0-2])|(0?[1-9]))" +//Checks to make sure that the months are between 1-12
+                "[/]" +//Checks for slash separators
+                "((3[01])|([12][0-9])|(0?[1-9]))" +//Checks to make sure that the days are between 1-31
+                "[/]" +//Checks for slash separators
+                "\\d{4}" +//Checks that the years are 4 digits long
+                "$";//Checks there's nothing at the end
 
-        Pattern pattern = Pattern.compile(regexDate);
+        String regexDateDash = "^" +//Checks there's nothing at the beginning
+                "((1[0-2])|(0?[1-9]))" +//Checks to make sure that the months are between 1-12
+                "[-]" +//Checks for dash separators
+                "((3[01])|([12][0-9])|(0?[1-9]))" +//Checks to make sure that the days are between 1-31
+                "[-]" +//Checks for dash separators
+                "\\d{4}" +//Checks that the years are 4 digits long
+                "$";//Checks there's nothing at the end
+
+        Pattern pattern = Pattern.compile(regexDateSlash + "|" + regexDateDash);
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
-            if(matcher.group().contains("-")){
-                month = Integer.parseInt(matcher.group().split("-")[0]);
-            } else if (matcher.group().contains("/")) {
-                month = Integer.parseInt(matcher.group().split("/")[0]);
+            String[] dateInfo = matcher.group().split("[-/]");
+
+            //Parses info on the input date to validate
+            day = Integer.parseInt(dateInfo[1]);
+            month = Integer.parseInt(dateInfo[0]);
+            year = Integer.parseInt(dateInfo[2]);
+
+            //Checks to see if the year is a leap year or not
+            boolean isLeapYear = (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
+
+            //Makes sure all days fall within the range on respective month
+            if (isLeapYear && month == 2 && !(day > 0 && day < 30)) {//If leap year make sure the Feb can have 29 days
+                return false;
+            } else if (!isLeapYear && month == 2 && !(day > 0 && day < 29)) {//Else Feb can have 28 days
+                return false;
+            } else if (((month == 1) || (month == 3) || (month == 5) || (month == 7) ||
+                    (month == 8) || (month == 10) || (month == 12)) && !(day > 0 && day < 32)) {
+                return false;
+            } else if (((month == 4) || (month == 6) || (month == 9) || (month == 11)) && !(day > 0 && day < 31)) {
+                return false;
             }
+
+            return true;
         }
+
+        return false;
+    }
+
+    /**
+     * Makes sure the input address follows the correct format
+     * @param input
+     * @return
+     */
+    public boolean validAdr (final String input) {
+        String regexAdr = "(?i)^" +//Catches anything before address and forgets case-sensitivity
+                "\\d{1,5}" +//Matches any Street number up to 5 digits
+                "\\s" +//Space between Street number and Street name
+                "((\\w+)\\s)+" +//Allows multiple words in Street name (i.e. 123 Martin Luther King Jr. Blvd.)
+                "(Rd\\.?|Road|St\\.?|Street|Blvd\\.?|Boulevard|Ave\\.?|Avenue)" +//Matches any address type w/ abbreviations
+                "$";//Catches anything after address
+
+        Pattern pattern = Pattern.compile(regexAdr);
+        Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
-            if(matcher.group().contains("-")){
-                day = Integer.parseInt(matcher.group().split("-")[0]);
-            } else if (matcher.group().contains("/")) {
-                day = Integer.parseInt(matcher.group().split("/")[0]);
-            }
+            return true;
         }
+
+        return false;
+    }
+
+    /**
+     * Validates city, state and zip letter format (EC: Matches abbreviations)
+     * @param input
+     * @return
+     */
+    public boolean validState (final String input) {
+        String regexState = "(?i)^" +//Catches anything before city name and forgets case-sensitivity
+                "(\\w+\\s)*" +//Allows multiple words in city name (i.e. Federal Way)
+                "(\\w+),\\s" +//Catches last word in city name with comma and space
+                "(a[klrz]|c[aot]|de|fl|ga|hi|i[adln]|k[sy]|la|m[adeinost]|n[cdehjmvy]|o[hkr]|" +
+                "pa|ri|s[cd]|t[nx]|ut|v[at]|w[aivy])" +//catches all 50 state abbreviations
+                "\\s" +//Space between State name and zip code
+                "\\d{5}" +//Matches 5-digit zip code
+                "$";//Catches anything after zip code
+
+        Pattern pattern = Pattern.compile(regexState);
+        Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
-            year = Integer.parseInt(matcher.group().split("-")[0]);
+            return true;
         }
 
-        if (!isDay(day, month) || !isMonth(month) || !isYear(year)) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
-    private boolean isDay (final int day, final int month) {
-        System.out.println(day);
+    /**
+     * Validates military times are in correct format without colon
+     * @param input
+     * @return
+     */
+    public boolean validMilitary (final String input) {
+        String regexMilitary = "^" +//Checks everything before time
+                "([01][0-9][0-5][0-9]|2[0-3][0-5][0-9])" +//Allows any time from 0000-2359. (doesn't count 2400 since its the same as 0000)
+                "$";//Checks everything after time
 
-        if (month == 1 || month == 3 || month == 5 ||
-                month == 7 || month == 8 || month == 10 || month == 12) {
-            if (day < 1 || day > 31) {
-                return false;
-            }
+        Pattern pattern = Pattern.compile(regexMilitary);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            return true;
         }
 
-        if (month == 4 || month == 6 || month == 9 || month == 11) {
-            if (day < 1 || day > 30) {
-                return false;
-            }
-        }
-
-        if (month == 2) {
-            if (day < 1 || day > 28) {
-                return false;
-            }
-        }
-
-        return true;
+        return false;
     }
 
-    private boolean isMonth (final int month) {
-        System.out.println(month);
+    /**
+     * Validates US Currency format down to pennies
+     * @param input
+     * @return
+     */
+    public boolean validCurrency (final String input) {
+        String regexCurrency = "^" +//Checks for anything before the currency
+                "\\$" +//Leading Dollar sign
+                "(([1-9]\\d{0,2}(,\\d{3})*)|" +//Matches any amount greater than $999.99
+                "(([1-9]\\d{0,1})?\\d))" +//Matches any amount less than or equal to $999.99 while watching for leading zero
+                "\\.\\d{2}" +//Penny level
+                "$";//Checks for anything after the currency
 
-        if (month < 1 || month > 12) {
-            return false;
+        Pattern pattern = Pattern.compile(regexCurrency);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
-    private boolean isYear (final int year) {
-        System.out.println(year);
-
-        if (year < 1) {
-            return false;
-        }
-
-        return true;
-    }
-
+    /**
+     * Main method used for quick testing
+     * @param args
+     */
     public static void main(String[] args) {
         RegexSolver solver = new RegexSolver();
 
-        System.out.println(solver.validDate("09/12/2032"));
+        System.out.println(solver.validCurrency("$10000.00"));
     }
 }
