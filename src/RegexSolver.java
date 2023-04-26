@@ -280,12 +280,54 @@ public class RegexSolver {
     }
 
     /**
+     * Validates that a URL is in the correct format
+     * @param input
+     * @return
+     */
+    public boolean validURL (final String input) {
+        String regexURL = "^" +//Checks to make sure nothing before
+                "(https://|http://)?" +//Optional https:// or http://
+                "(\\w+\\.)?" +//Can have one subdomain
+                "(\\w+\\.)" +//Must have second-level domain
+                "(\\w+)" +//Must have top-level domain
+                "((/[^/]+)+|/)" +//Must have at least empty subdirectory or can have multiple subdirectories
+                "$";//Checks to make sure nothing after
+
+        Pattern pattern = Pattern.compile(regexURL);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean validPassword (final String input) {
+        String regexPass = "^" +
+                "(?=.{10,}$)" +
+                "(([A-Za-z0-9])" +
+                "\3?" +
+                ")" +
+                "$";
+
+        Pattern pattern = Pattern.compile(regexPass);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Main method used for quick testing
      * @param args
      */
     public static void main(String[] args) {
         RegexSolver solver = new RegexSolver();
 
-        System.out.println(solver.validCurrency("$10000.00"));
+        System.out.println(solver.validURL("Helpeee1234!?@"));
     }
 }

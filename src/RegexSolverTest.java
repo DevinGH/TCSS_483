@@ -458,4 +458,55 @@ class RegexSolverTest {
         assertEquals(false, solver.validCurrency("$00.00"));
         assertEquals(false, solver.validCurrency("$01.99"));
     }
+
+    @Test
+    void validURLNoHTTPOrHTTPS(){
+        assertEquals(true, solver.validURL("www.google.com/"));
+    }
+
+    @Test
+    void validURLHTTPSOrHTTP(){
+        assertEquals(true, solver.validURL("https://www.google.com/"));
+        assertEquals(true, solver.validURL("http://www.google.com/"));
+    }
+
+    @Test
+    void validURLWithWithoutSubdomain(){
+        assertEquals(true, solver.validURL("https://github.com/"));
+    }
+
+    @Test
+    void validURLMultiSubDirectory(){
+        assertEquals(true, solver.validURL("https://github.com/MyUserN@m3!?/MyFirstRepo"));
+    }
+
+    @Test
+    void invalidURLEmpty(){
+        assertEquals(false, solver.validURL(""));
+    }
+
+    @Test
+    void invalidURLMissingSecondDomain(){
+        assertEquals(false, solver.validURL("www..com"));
+    }
+
+    @Test
+    void invalidURLMissingTopDomain(){
+        assertEquals(false, solver.validURL("www.google"));
+    }
+
+    @Test
+    void invalidURLNoDomains(){
+        assertEquals(false, solver.validURL("https:///yes/waht"));
+    }
+
+    @Test
+    void invalidURLWrongSubdirectory(){
+        assertEquals(false, solver.validURL("www.google.com//"));
+    }
+
+    @Test
+    void invalidURLMisspelledScheme(){
+        assertEquals(false, solver.validURL("httsp//:www.google.com"));
+    }
 }
