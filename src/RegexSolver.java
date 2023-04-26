@@ -156,7 +156,7 @@ public class RegexSolver {
                 "\\d{4}" +//Checks that the years are 4 digits long
                 "$";//Checks there's nothing at the end
 
-        Pattern pattern = Pattern.compile(regexDateSlash + "|" + regexDateDash);
+        Pattern pattern = Pattern.compile(regexDateSlash + "|" + regexDateDash);//Makes sure the date can only have slashes or dashes, no mixing
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
@@ -349,13 +349,12 @@ public class RegexSolver {
         return false;
     }
 
-    /**
-     * Main method used for quick testing
-     * @param args
-     */
-    public static void main(String[] args) {
-        RegexSolver solver = new RegexSolver();
-
-        System.out.println(solver.validIonWord("attenion"));
-    }
+//    /**
+//     * Main method used for quick testing
+//     * @param args
+//    public static void main(String[] args) {
+//        RegexSolver solver = new RegexSolver();
+//
+//        System.out.println(solver.validIonWord("attenion"));
+//    }*/
 }
