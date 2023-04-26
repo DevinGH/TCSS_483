@@ -3,7 +3,9 @@ import java.util.regex.Pattern;
 
 public class RegexSolver {
     /**
-     * Validates correct format for a Social Security Number(SSN)
+     * Validates correct format for a Social Security Number(SSN) detailed in regex comments
+     * SHORTCOMINGS: Figuring out how to make sure the SSN only has spaces/dashes/no spaces
+     * without there being any mixing.
      * @param input
      * @return
      */
@@ -54,7 +56,8 @@ public class RegexSolver {
     }
 
     /**
-     * Validates correct phone number format
+     * Validates correct phone number format detailed in comments of regex
+     * SHORTCOMINGS: No Shortcomings
      * @param input
      * @return
      */
@@ -81,7 +84,9 @@ public class RegexSolver {
     }
 
     /**
-     * Validates an email is in the correct format
+     * Validates an email is in the correct format detailed in regex comments
+     * SHORTCOMINGS: Knowing what and what not to allow being a part of the email,
+     * the requirements were a little vague.
      * @param input
      * @return
      */
@@ -107,7 +112,8 @@ public class RegexSolver {
     }
 
     /**
-     * Validates roster name is in correct format
+     * Validates roster name is in correct format detailed in regex comments
+     * SHORTCOMINGS: No shortcomings
      * @param input
      * @return
      */
@@ -133,7 +139,10 @@ public class RegexSolver {
     }
 
     /**
-     * Validates day is in correct format
+     * Validates day is in correct format detailed in regex comments
+     * SHORTCOMINGS: Making sure that the input string had a valid date only using regex, then
+     * figuring out if it was a leap year and validating the day based on the month which is
+     * based on the year.
      * @param input
      * @return
      */
@@ -189,7 +198,9 @@ public class RegexSolver {
     }
 
     /**
-     * Makes sure the input address follows the correct format
+     * Makes sure the input address follows the correct format detailed in regex comments
+     * SHORTCOMINGS: Learning how to capture words on their own and not just matching single chars
+     * on their own.
      * @param input
      * @return
      */
@@ -212,7 +223,10 @@ public class RegexSolver {
     }
 
     /**
-     * Validates city, state and zip letter format (EC: Matches abbreviations)
+     * Validates city, state and zip letter format detailed in regex comments
+     * SHORTCOMINGS: Learning how to match a multitude of words by pairing up
+     * common first letters.
+     * Extra Credit: Matches states by their abbreviations
      * @param input
      * @return
      */
@@ -237,13 +251,15 @@ public class RegexSolver {
     }
 
     /**
-     * Validates military times are in correct format without colon
+     * Validates military times are in correct format without colon detailed in regex comments
+     * SHORTCOMINGS: Figuring out how to validate times (i.e. last two numbers can't go above 59
+     * and first two can't go above 23), and how to attach leading zero.
      * @param input
      * @return
      */
     public boolean validMilitary (final String input) {
         String regexMilitary = "^" +//Checks everything before time
-                "([01][0-9][0-5][0-9]|2[0-3][0-5][0-9])" +//Allows any time from 0000-2359. (doesn't count 2400 since its the same as 0000)
+                "([01][0-9][0-5][0-9]|2[0-3][0-5][0-9])" +//Allows any time from 0000-2359. (doesn't count 2400 since it's the same as 0000)
                 "$";//Checks everything after time
 
         Pattern pattern = Pattern.compile(regexMilitary);
@@ -257,7 +273,9 @@ public class RegexSolver {
     }
 
     /**
-     * Validates US Currency format down to pennies
+     * Validates US Currency format down to pennies detailed in regex comments
+     * SHORTCOMINGS: How to match it based on the correct format (i.e. how to match
+     * $1,000,000.00 and not match $009,000.00).
      * @param input
      * @return
      */
@@ -280,7 +298,8 @@ public class RegexSolver {
     }
 
     /**
-     * Validates that a URL is in the correct format
+     * Validates that a URL is in the correct format detailed in regex comments
+     * SHORTCOMINGS: No shortcomings
      * @param input
      * @return
      */
@@ -304,7 +323,9 @@ public class RegexSolver {
     }
 
     /**
-     * Validates that a password follows the format
+     * Validates that a password follows the format detailed in regex comments
+     * SHORTCOMINGS: Learning how to use lookaheads to verify certain conditions
+     * (i.e. How to make sure that there is at least one capital letter).
      * @param input
      * @return
      */
@@ -329,7 +350,9 @@ public class RegexSolver {
     }
 
     /**
-     * Validates a word with odd letters has ion at end
+     * Validates a word with odd letters has ion at end detailed in regex comments
+     * SHORTCOMINGS: How to verify odd number of letters, and use lookbehinds to see
+     * if the word ended in ion or not.
      * @param input
      * @return
      */
@@ -349,12 +372,5 @@ public class RegexSolver {
         return false;
     }
 
-//    /**
-//     * Main method used for quick testing
-//     * @param args
-//    public static void main(String[] args) {
-//        RegexSolver solver = new RegexSolver();
-//
-//        System.out.println(solver.validIonWord("attenion"));
-//    }*/
+
 }
