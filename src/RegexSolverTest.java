@@ -509,4 +509,108 @@ class RegexSolverTest {
     void invalidURLMisspelledScheme(){
         assertEquals(false, solver.validURL("httsp//:www.google.com"));
     }
+
+    @Test
+    void validPasswordBaseCondition(){
+        assertEquals(true, solver.validPassword("Devin1!?@#"));
+    }
+
+    @Test
+    void validPasswordMoreCapital(){
+        assertEquals(true, solver.validPassword("DEVIn1!?@#"));
+    }
+
+    @Test
+    void validPasswordRepeatingLowers(){
+        assertEquals(true, solver.validPassword("Deeen1!?@#"));
+    }
+
+    @Test
+    void validPasswordMorePunctuation(){
+        assertEquals(true, solver.validPassword("De!!!1!?@#"));
+    }
+
+    @Test
+    void validPasswordMoreDigits(){
+        assertEquals(true, solver.validPassword("Devin1234!"));
+    }
+
+    @Test
+    void invalidPasswordEmpty(){
+        assertEquals(false, solver.validPassword(""));
+    }
+
+    @Test
+    void invalidPasswordLessThan10(){
+        assertEquals(false, solver.validPassword("Devin1!?@"));
+        assertEquals(false, solver.validPassword("Den1!#"));
+    }
+
+    @Test
+    void invalidPasswordMoreThan3Repeated(){
+        assertEquals(false, solver.validPassword("Deeee1!?@#"));
+        assertEquals(false, solver.validPassword("Deviiiin1!?@#"));
+    }
+
+    @Test
+    void invalidPasswordNoCapital(){
+        assertEquals(false, solver.validPassword("devin1!?@#"));
+    }
+
+    @Test
+    void invalidPasswordNoLower(){
+        assertEquals(false, solver.validPassword("DEVIN1!?@#"));
+    }
+
+    @Test
+    void invalidPasswordNoDigits(){
+        assertEquals(false, solver.validPassword("Devin!!!!!?@#"));
+    }
+
+    @Test
+    void invalidPasswordNoPunc(){
+        assertEquals(false, solver.validPassword("Devin123456"));
+    }
+
+    @Test
+    void validIonWordIon(){
+        assertEquals(true, solver.validIonWord("ion"));
+        assertEquals(true, solver.validIonWord("ION"));
+    }
+
+    @Test
+    void validIonWords(){
+        assertEquals(true, solver.validIonWord("attention"));
+        assertEquals(true, solver.validIonWord("differentiation"));
+        assertEquals(true, solver.validIonWord("experimentation"));
+        assertEquals(true, solver.validIonWord("comprehension"));
+    }
+
+    @Test
+    void invalidIonWordEmpty(){
+        assertEquals(false, solver.validIonWord(""));
+    }
+
+    @Test
+    void invalidIonWordNoIon(){
+        assertEquals(false, solver.validIonWord("statistic"));
+        assertEquals(false, solver.validIonWord("ashjd"));
+        assertEquals(false, solver.validIonWord("ewthywebr"));
+        assertEquals(false, solver.validIonWord("ashjfbshd"));
+    }
+
+    @Test
+    void invalidIonWordEvenSize(){
+        assertEquals(false, solver.validIonWord("Pevenion"));
+    }
+
+    @Test
+    void invalidIonWordDigits(){
+        assertEquals(false, solver.validIonWord("123123ion"));
+    }
+
+    @Test
+    void invalidIonWordNotAtEnd(){
+        assertEquals(false, solver.validIonWord("ionizingr"));
+    }
 }

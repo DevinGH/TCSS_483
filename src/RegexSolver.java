@@ -303,15 +303,43 @@ public class RegexSolver {
         return false;
     }
 
+    /**
+     * Validates that a password follows the format
+     * @param input
+     * @return
+     */
     public boolean validPassword (final String input) {
-        String regexPass = "^" +
-                "(?=.{10,}$)" +
-                "(([A-Za-z0-9])" +
-                "\3?" +
-                ")" +
-                "$";
+        String regexPass = "^" +//Checks there is nothing at beginning of password
+                "(?=.*[A-Z])" +//Makes sure there is at least 1 capital letter
+                "(?=.*[a-z])" +//Makes sure there is at least 1 lower letter
+                "(?=.*\\d)" +//Makes sure there is at least 1 number
+                "(?=.*[!?@#])" +//Makes sure there is at least 1 punctuation mark
+                "(?!.*([a-z])\\1{3,})" +//Makes sure there is no more than 3 repeating lower letters
+                "[a-zA-Z\\d!@?#]{10,}" +//Makes sure there is at least 10 characters in the password
+                "$";//Checks there is nothing after the password
 
         Pattern pattern = Pattern.compile(regexPass);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Validates a word with odd letters has ion at end
+     * @param input
+     * @return
+     */
+    public boolean validIonWord (final String input) {
+        String regexIonWord = "(?i)^" +//Makes sure there is nothing before the word and doesn't worry about case-sensitivity
+                "(([a-z][a-z])+[a-z])" +//Matches only odd numbers of letters
+                "(?<=ion)" +//Lookbehind for the last letters being ion
+                "$";//Makes sure there is nothing after the word
+
+        Pattern pattern = Pattern.compile(regexIonWord);
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
@@ -328,6 +356,6 @@ public class RegexSolver {
     public static void main(String[] args) {
         RegexSolver solver = new RegexSolver();
 
-        System.out.println(solver.validURL("Helpeee1234!?@"));
+        System.out.println(solver.validIonWord("attenion"));
     }
 }
